@@ -17,16 +17,20 @@ const ADMIN_TOKEN = process.env.API_KEY;
 // ========================================
 
 /**
- * 1. 取得產品列表
+ * 1. 取得產品列表: /products
  * 使用 fetch 發送 GET 請求
  * @returns {Promise<Array>} - 回傳 products 陣列
  */
 async function getProducts() {
-	// 請實作此函式
 	// 提示：
 	// 1. 使用 fetch() 發送 GET 請求
+	const fetchURL =`${BASE_URL}${API_PATH}products`;
+	console.log(fetchURL)
+	const response = await fetch(fetchURL);
 	// 2. 使用 response.json() 解析回應
+	const data = await response.json();
 	// 3. 回傳 data.products
+	return data.products;
 }
 
 /**
