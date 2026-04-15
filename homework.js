@@ -25,10 +25,10 @@ async function getProducts() {
 	// 提示：
 	// 1. 使用 fetch() 發送 GET 請求
 	const fetchURL =`${BASE_URL}${API_PATH}products`;
-	console.log(fetchURL)
+	//console.log(fetchURL)
 	const response = await fetch(fetchURL);
 	// 2. 使用 response.json() 解析回應
-	const data = await response.json();
+	const data     = await response.json();
 	// 3. 回傳 data.products
 	return data.products;
 }
