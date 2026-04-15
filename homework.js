@@ -34,11 +34,18 @@ async function getProducts() {
 }
 
 /**
- * 2. 取得購物車列表
+ * 2. 取得購物車列表 /api/livejs/v1/customer/{api_path}/carts
  * @returns {Promise<Object>} - 回傳 { carts: [...], total: 數字, finalTotal: 數字 }
  */
 async function getCart() {
-	// 請實作此函式
+	// 1. 使用 fetch() 發送 GET 請求
+	const fetchURL =`${BASE_URL}${API_PATH}carts`;
+	//console.log(fetchURL)
+	const response = await fetch(fetchURL);
+	// 2. 使用 response.json() 解析回應
+	const data     = await response.json();
+	// 3. 回傳 data
+	return data;
 }
 
 /**
@@ -170,7 +177,7 @@ if (require.main === module) {
 			const cart = await getCart();
 			console.log(
 				"getCart:",
-				cart ? `購物車有 ${cart.carts?.length || 0} 筆商品` : "回傳 undefined",
+				cart ? `購物車有 ${cart.carts.length || 0} 筆商品` : "回傳 undefined",
 			);
 		} catch (error) {
 			console.log("getCart 錯誤:", error.message);
