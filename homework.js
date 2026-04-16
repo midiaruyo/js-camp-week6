@@ -133,8 +133,21 @@ async function updateCartItem(cartId, quantity) {
  * @returns {Promise<Object>} - 回傳更新後的購物車資料
  */
 async function removeCartItem(cartId) {
-	// 請實作此函式
-	// 提示：發送 DELETE 請求到 /carts/{id}
+	// 1. 提示：發送 DELETE 請求
+	const delCartPath   = `${CARTS_PATH}/${cartId}`; 
+    const delCart       = await fetch(delCartPath, {
+        method: "DELETE"
+    });
+	if (!delCart.ok) {
+        throw new Error(`Del Cart[${cartId}] Status：${delCart.status}`);
+    }
+	// 2. 回傳更新後的購物車資料
+	const getCarts  = await fetch(CARTS_PATH);
+	if (!getCarts.ok) {
+        throw new Error(`get Cart Status：${getCarts.status}`);
+    }
+	const carts    = await getCarts.json();
+	return carts;
 }
 
 /**
@@ -144,6 +157,20 @@ async function removeCartItem(cartId) {
 async function clearCart() {
 	// 請實作此函式
 	// 提示：發送 DELETE 請求到 /carts
+	// 1. 提示：發送 DELETE 請求
+    const clearCart       = await fetch(CARTS_PATH, {
+        method: "DELETE"
+    });
+	if (!clearCart.ok) {
+        throw new Error(`Clear Cart Status：${clearCart.status}`);
+    }
+	// 2. 回傳更新後的購物車資料
+	const getCarts  = await fetch(CARTS_PATH);
+	if (!getCarts.ok) {
+        throw new Error(`get Cart Status：${getCarts.status}`);
+    }
+	const carts    = await getCarts.json();
+	return carts;
 }
 
 // ========================================
