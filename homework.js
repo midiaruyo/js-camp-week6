@@ -23,13 +23,21 @@ const CARTS_PATH    =`${BASE_URL}${API_PATH}carts`;    //取購物車列表
  * @returns {Promise<Array>} - 回傳 products 陣列
  */
 async function getProducts() {
-	// 1. 使用 fetch() 發送 GET 請求
-	const response = await fetch(PRODUCTS_PATH);
-    //console.log(PRODUCTS_PATH)
-	// 2. 使用 response.json() 解析回應
-	const data     = await response.json();
-	// 3. 回傳 data.products
-	return data.products;
+	try {
+        // 1. 使用 fetch() 發送 GET 請求
+        const response = await fetch(PRODUCTS_PATH);
+        //console.log(PRODUCTS_PATH)
+        // 2. 使用 response.json() 解析回應
+        if (!response.ok) {
+            return [];
+        }
+        const data = await response.json();
+        // 3. 回傳 data.products
+        return data.products||[];
+    } catch (error) {
+		console.log("getProducts fail:", error);
+        return [];
+	}
 }
 
 /**
@@ -37,13 +45,31 @@ async function getProducts() {
  * @returns {Promise<Object>} - 回傳 { carts: [...], total: 數字, finalTotal: 數字 }
  */
 async function getCart() {
-	// 1. 使用 fetch() 發送 GET 請求
-	const response = await fetch(CARTS_PATH);
-	//console.log(CARTS_PATH)
-	// 2. 使用 response.json() 解析回應
-	const data     = await response.json();
-	// 3. 回傳 data
-	return data;
+	try {
+		// 1. 使用 fetch() 發送 GET 請求
+		const response = await fetch(CARTS_PATH);
+		//console.log(CARTS_PATH)
+		if (!response.ok) {
+			return { "status": false, carts: [], total: 0, finalTotal: 0 };
+		}
+	
+		// 2. 使用 response.json() 解析回應
+		const data       = await response.json();
+		const cartList   = data.carts || [];
+		const total      = cartList.reduce(
+			(acc, item) => acc + item.product.origin_price * item.quantity,
+			0
+		);
+		const finalTotal = cartList.reduce(
+			(acc, item) => acc + item.product.price * item.quantity,
+			0
+		);
+		return {...data, total, finalTotal};	
+		
+	} catch (error) {
+		console.log("getCart fail:", error);
+        return { "status": false, carts: [], total: 0, finalTotal: 0 };
+	}
 }
 
 /**
