@@ -35,7 +35,7 @@ async function getProducts() {
         // 3. 回傳 data.products
         return data.products||[];
     } catch (error) {
-		console.log("getProducts fail:", error);
+		console.log("getProducts fail:" + error);
         return [];
 	}
 }
@@ -67,8 +67,8 @@ async function getCart() {
 		return {...data, total, finalTotal};	
 		
 	} catch (error) {
-		console.log("getCart fail:", error);
-        return { "status": false, carts: [], total: 0, finalTotal: 0 };
+		console.log("getCart fail:" +  error);
+        throw error;
 	}
 }
 
@@ -106,24 +106,32 @@ async function getProductsSafe() {
  * @returns {Promise<Object>} - 回傳更新後的購物車資料
  */
 async function addToCart(productId, quantity) {
-	// 1. 發送 POST 請求
-	const fetchHdr  = { "Content-Type": "application/json"};
-	const fetchBody = { data: { productId: productId, quantity: quantity } };
-    const addCart   = await fetch(CARTS_PATH, {
-        method: "POST",
-        headers: fetchHdr,
-        body: JSON.stringify(fetchBody),
-    });
-	if (!addCart.ok) {
-        throw new Error(`Add Cart Status：${addCart.status}`);
-    }
-	// 2. 回傳更新後的購物車資料
-	const getCarts = await fetch(CARTS_PATH);
-	if (!getCarts.ok) {
-        throw new Error(`get Cart Status：${getCarts.status}`);
-    }
-	const carts    = await getCarts.json();
-	return carts;
+
+	try {
+		//0. 檢查輸入
+		if (quantity < 1) {
+			throw new Error(`產品數量不可小於 1 RRR ((((；゜Д゜)))`);
+		}	
+		// 1. 發送 POST 請求
+		const fetchHdr  = { "Content-Type": "application/json"};
+		const fetchBody = { data: { productId , quantity } };
+		const addCart = await fetch(CARTS_PATH, {
+			method: "POST",
+			headers: fetchHdr,
+			body: JSON.stringify(fetchBody),
+		});
+		if (!addCart.ok) {
+			throw new Error(`Add Cart Status：${addCart.status}`);
+		}
+		const carts = await addCart.json();
+		// 2. 回傳更新後的購物車資料
+		return carts;
+
+	} catch (error) {
+		console.log("addToCart Fail:"+ error);
+        throw error;	
+	}
+
 }
 
 /**
