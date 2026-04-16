@@ -80,12 +80,25 @@ async function getProductsSafe() {
  * @returns {Promise<Object>} - 回傳更新後的購物車資料
  */
 async function addToCart(productId, quantity) {
-	// 請實作此函式
-	// 提示：
+
 	// 1. 發送 POST 請求
-	// 2. body 格式：{ data: { productId: "xxx", quantity: 1 } }
-	// 3. 記得設定 headers: { 'Content-Type': 'application/json' }
-	// 4. body 要用 JSON.stringify() 轉換
+	const fetchHdr  = { "Content-Type": "application/json"};
+	const fetchBody = { data: { productId: productId, quantity: quantity } };
+    const addCart   = await fetch(CARTS_PATH, {
+        method: "POST",
+        headers: fetchHdr,
+        body: JSON.stringify(fetchBody),
+    });
+	if (!addCart.ok) {
+        throw new Error(`Add Cart Status：${addCart.status}`);
+    }
+	// 2. 回傳更新後的購物車資料
+	const getCarts = await fetch(CARTS_PATH);
+	if (!getCarts.ok) {
+        throw new Error(`get Cart Status：${getCarts.status}`);
+    }
+	const carts    = await getCarts.json();
+	return carts;
 }
 
 /**
