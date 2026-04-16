@@ -51,12 +51,22 @@ async function getCart() {
  * @returns {Promise<Object>} - 回傳 { success: boolean, data?: [...], error?: string }
  */
 async function getProductsSafe() {
-	// 請實作此函式
-	// 提示：
+	
 	// 1. 加上 try-catch 處理錯誤
-	// 2. 檢查 response.ok 判斷是否成功
-	// 3. 成功回傳 { success: true, data: [...] }
-	// 4. 失敗回傳 { success: false, error: '錯誤訊息' }
+	try {
+		const response = await fetch(PRODUCTS_PATH);
+		
+		// 2. 檢查 response.ok 判斷是否成功
+		if(!response.ok){
+			return { success: false, error: `HTTP Status：${response.status}` };
+		}
+        // 3. 成功回傳 { success: true, data: [...] }
+		const data     = await response.json();
+		return { success: true, data: data.products };
+	} catch (error) {
+		// 4. 失敗回傳 { success: false, error: '錯誤訊息' }
+        return { success: false, error: error.message };
+	}
 }
 
 // ========================================
