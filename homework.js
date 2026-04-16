@@ -80,7 +80,6 @@ async function getProductsSafe() {
  * @returns {Promise<Object>} - 回傳更新後的購物車資料
  */
 async function addToCart(productId, quantity) {
-
 	// 1. 發送 POST 請求
 	const fetchHdr  = { "Content-Type": "application/json"};
 	const fetchBody = { data: { productId: productId, quantity: quantity } };
@@ -108,10 +107,24 @@ async function addToCart(productId, quantity) {
  * @returns {Promise<Object>} - 回傳更新後的購物車資料
  */
 async function updateCartItem(cartId, quantity) {
-	// 請實作此函式
-	// 提示：
 	// 1. 發送 PATCH 請求
-	// 2. body 格式：{ data: { id: "購物車ID", quantity: 數量 } }
+	const fetchHdr  = { "Content-Type": "application/json"};
+	const fetchBody = { data: { id: cartId, quantity: quantity } };
+    const updCart   = await fetch(CARTS_PATH, {
+        method: "PATCH",
+        headers: fetchHdr,
+        body: JSON.stringify(fetchBody),
+    });
+	if (!updCart.ok) {
+        throw new Error(`Update Cart Status：${updCart.status}`);
+    }
+	// 2. 回傳更新後的購物車資料
+	const getCarts  = await fetch(CARTS_PATH);
+	if (!getCarts.ok) {
+        throw new Error(`get Cart Status：${getCarts.status}`);
+    }
+	const carts    = await getCarts.json();
+	return carts;
 }
 
 /**
