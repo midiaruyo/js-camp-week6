@@ -185,7 +185,7 @@ if (require.main === module) {
 			const cart = await getCart();
 			console.log(
 				"getCart:",
-				cart ? `購物車有 ${cart.carts.length || 0} 筆商品` : "回傳 undefined",
+				cart ? `購物車有 ${cart.carts?.length || 0} 筆商品` : "回傳 undefined",
 			);
 		} catch (error) {
 			console.log("getCart 錯誤:", error.message);
