@@ -77,7 +77,6 @@ async function getCart() {
  * @returns {Promise<Object>} - 回傳 { success: boolean, data?: [...], error?: string }
  */
 async function getProductsSafe() {
-	
 	// 1. 加上 try-catch 處理錯誤
 	try {
 		const response = await fetch(PRODUCTS_PATH);
@@ -106,7 +105,6 @@ async function getProductsSafe() {
  * @returns {Promise<Object>} - 回傳更新後的購物車資料
  */
 async function addToCart(productId, quantity) {
-
 	try {
 		//0. 檢查輸入
 		if (quantity < 1) {
@@ -131,7 +129,6 @@ async function addToCart(productId, quantity) {
 		console.log("addToCart Fail:"+ error);
         throw error;	
 	}
-
 }
 
 /**
@@ -141,7 +138,6 @@ async function addToCart(productId, quantity) {
  * @returns {Promise<Object>} - 回傳更新後的購物車資料
  */
 async function updateCartItem(cartId, quantity) {
-
 	try {
 		// 1. 發送 PATCH 請求
 		const fetchHdr  = { "Content-Type": "application/json"};
@@ -161,7 +157,6 @@ async function updateCartItem(cartId, quantity) {
 		console.log("updateCartItem Fail:"+ error);
         throw error;		
 	}
-
 }
 
 /**
@@ -170,7 +165,6 @@ async function updateCartItem(cartId, quantity) {
  * @returns {Promise<Object>} - 回傳更新後的購物車資料
  */
 async function removeCartItem(cartId) {
-
 	try {
 		// 1. 提示：發送 DELETE 請求
 		const delCartPath   = `${CARTS_PATH}/${cartId}`; 
@@ -187,7 +181,6 @@ async function removeCartItem(cartId) {
 		console.log("removeCartItem ["+cartId+"]Fail:"+ error);
         throw error;			
 	}
-
 }
 
 /**
@@ -195,7 +188,6 @@ async function removeCartItem(cartId) {
  * @returns {Promise<Object>} - 回傳清空後的購物車資料
  */
 async function clearCart() {
-
 	try {
 		const clearCart       = await fetch(CARTS_PATH, {
 			method: "DELETE"
@@ -210,7 +202,6 @@ async function clearCart() {
 		console.log("clearCart Fail:"+ error);
         throw error;			
 	}
-
 }
 
 // ========================================
@@ -222,14 +213,43 @@ async function clearCart() {
 
 1. HTTP 狀態碼的分類（1xx, 2xx, 3xx, 4xx, 5xx 各代表什麼）
    答：
+1xx,資訊類： 
+例如 100 continue 一 當用戶使用PUT請求上傳檔案，伺服器使用100 Continue告訴用戶繼續上傳
+https://developer.mozilla.org/zh-TW/docs/Web/HTTP/Reference/Status/100
+
+2xx,請求成功： 
+例如 200 ok 一 用戶使用GET請求資料，伺服器回應200 ok並附上資料
+
+3xx,轉向： 
+例如 303 see other 一 伺服器告訴用戶：轉存取另一個URI資源
+
+4xx,client端失敗回應： 
+例如 404 Not found 一 伺服器告訴用戶：請求的資源不存在
+
+5xx,server端錯誤回應： 
+例如 503 Service Unavailable 一 伺服器告訴用戶：伺服器無法完成請求
+
+主要參考 https://developer.mozilla.org/zh-TW/docs/Web/HTTP/Reference/Status#%E8%B3%87%E8%A8%8A%E5%9B%9E%E6%87%89
+
 
 2. GET、POST、PATCH、PUT、DELETE 的差異
    答：
+ GET、取得資料
+ POST、新增資料
+ PATCH、更新部分資料（傳遞單筆資料部分屬性，更新原有資料）
+ PUT、更新完整資料（傳遞單筆資料所有屬性，覆蓋原有資料）
+ DELETE 刪除資源
+ 
+參考：https://hackmd.io/@hexschool/SkJZZrH2-g#HTTP-方法-—-你要服務生做什麼
 
 3. 什麼是 RESTful API？
    答：
+   1.REST = REpresentational State Transfer，
+   透過 HTTP 把資源當下的狀態，用某種呈現格式(例如：JSON)，傳給用戶端
+   2.RESTful = 符合 REST 風格的 API
+   透過網址(例如：/carts)描述要存取的資源，透過方法(例如：GET、POST..)來描述要取還是要存
 
-
+參考：https://hackmd.io/@hexschool/SkJZZrH2-g#RESTful-API-是什麼
 */
 
 // ========================================
