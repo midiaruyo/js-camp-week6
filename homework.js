@@ -11,8 +11,10 @@ require("dotenv").config({ path: ".env" });
 const API_PATH = process.env.API_PATH;
 const BASE_URL = "https://livejs-api.hexschool.io";
 const ADMIN_TOKEN = process.env.API_KEY;
-const PRODUCTS_PATH =`${BASE_URL}${API_PATH}products`; //取產品列表
-const CARTS_PATH    =`${BASE_URL}${API_PATH}carts`;    //取購物車列表
+const PRODUCTS_PATH =`${BASE_URL}/api/livejs/v1/customer/${API_PATH}/products`; //取產品列表
+const CARTS_PATH    =`${BASE_URL}/api/livejs/v1/customer/${API_PATH}/carts`;    //取購物車列表
+
+
 // ========================================
 // 任務一：基礎 fetch 練習
 // ========================================
@@ -25,6 +27,7 @@ const CARTS_PATH    =`${BASE_URL}${API_PATH}carts`;    //取購物車列表
 async function getProducts() {
 	try {
         // 1. 使用 fetch() 發送 GET 請求
+		
         const response = await fetch(PRODUCTS_PATH);
         //console.log(PRODUCTS_PATH)
         // 2. 使用 response.json() 解析回應
